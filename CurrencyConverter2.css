@@ -1,0 +1,239 @@
+/* ============================================================
+   DESIGN TOKENS
+   Ink-navy structure + warm gold accent, evoking an exchange
+   board rather than a generic fintech gradient.
+   ============================================================ */
+:root{
+    --ink: #16324A;         /* deep navy — headings, borders */
+    --ink-soft: #3A5570;    /* muted navy — labels, secondary text */
+    --gold: #C89B3C;        /* accent — the "exchange" color */
+    --gold-dark: #A87F2C;   /* gold hover/active state */
+    --bg: #F3F5F4;          /* page background, cool off-white */
+    --card: #FFFFFF;        /* card background */
+    --border: #E1E6E5;      /* hairline borders */
+    --text: #1F2A33;
+    --shadow: 0 8px 24px rgba(22, 50, 74, 0.08);
+}
+
+.montserrat-font, body{
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+
+* { box-sizing: border-box; }
+
+body{
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 40px 20px 60px;
+    min-height: 100vh;
+}
+
+/* CHANGED: Title now uses Concert One (the display font already imported
+   in the HTML but previously unused) with a small letter-spacing to give
+   it an "exchange board" plaque feel, instead of plain green text. */
+#Title{
+    text-align: center;
+    color: var(--ink);
+    font-family: "Concert One", cursive;
+    font-size: 2.5rem;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    margin: 0 0 4px;
+}
+
+/* CHANGED: subtitle recolored to the muted navy tone instead of green,
+   so it reads as secondary text under the new title. */
+#Note{
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    margin: 0 0 40px;
+}
+
+/* ============================================================
+   LAYOUT
+   Two cards with the swap button overlapping both edges.
+   The old transform: translateX nudges are replaced by a real
+   flex layout with a shared gap, so it stays centered at any
+   screen width instead of being manually offset by 20px.
+   ============================================================ */
+#MainContainer{
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 0;
+    max-width: 720px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.currency-card{
+    display: flex;
+    flex-direction: column;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    padding: 24px 22px;
+    width: 280px;
+    gap: 12px;
+}
+
+#Container1{
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+#Container2{
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+#Currency1Label, #Currency2Label{
+    text-align: left;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+}
+
+/* ============================================================
+   FORM CONTROLS
+   ============================================================ */
+#Currency1, #Currency2{
+    cursor: pointer;
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    appearance: none;
+    /* simple chevron so the select doesn't look like bare browser chrome */
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233A5570' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+    padding-right: 32px;
+    transition: border-color 0.15s ease;
+}
+
+#Currency1:hover, #Currency2:hover,
+#Currency1:focus-visible, #Currency2:focus-visible{
+    border-color: var(--gold);
+    outline: none;
+}
+
+/* Numbers get a monospace face so the two amounts line up like a
+   ledger, and the gold accent marks the editable field as "live". */
+#Currency1Text, #Currency2Text{
+    font-family: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--ink);
+    border: none;
+    border-bottom: 2px solid var(--border);
+    background: transparent;
+    resize: none;
+    padding: 6px 2px;
+    height: 46px;
+    width: 100%;
+    transition: border-color 0.15s ease;
+}
+
+#Currency1Text:focus{
+    outline: none;
+    border-bottom-color: var(--gold);
+}
+
+/* The read-only result field is visually distinct: muted color,
+   no caret, dashed underline to signal "not directly editable". */
+#Currency2Text{
+    color: var(--ink-soft);
+    border-bottom-style: dashed;
+    cursor: default;
+}
+
+textarea::placeholder{
+    color: #B7C0C6;
+    font-weight: 500;
+}
+
+/* ============================================================
+   SIGNATURE ELEMENT — the coin-styled swap button
+   Sits on the seam between the two cards; rotates on click.
+   ============================================================ */
+#SwapButton{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    border-radius: 50%;
+    background: var(--gold);
+    color: var(--card);
+    border: 4px solid var(--bg);
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    z-index: 2;
+    margin: 0 -22px;
+    transition: transform 0.35s ease, background 0.15s ease;
+}
+
+#SwapButton:hover{
+    background: var(--gold-dark);
+}
+
+#SwapButton:active svg,
+#SwapButton.spin svg{
+    transform: rotate(180deg);
+}
+
+#SwapButton svg{
+    transition: transform 0.35s ease;
+}
+
+#SwapButton:focus-visible{
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+}
+
+/* ============================================================
+   RESPONSIVE
+   Stack the cards on narrow screens; the swap button rotates
+   90° so its arrows still point the right way (down/up).
+   ============================================================ */
+@media (max-width: 620px){
+    #MainContainer{
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .currency-card{
+        width: 100%;
+        max-width: 320px;
+        border-radius: 16px;
+    }
+
+    #Container1, #Container2{
+        border-radius: 16px;
+    }
+
+    #SwapButton{
+        margin: -22px 0;
+        transform: rotate(90deg);
+    }
+
+    #SwapButton:active svg,
+    #SwapButton.spin svg{
+        transform: rotate(180deg);
+    }
+}
